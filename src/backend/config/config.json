@@ -8,7 +8,7 @@
         "dialect": "mysql",
         "define": {
             "charset": "utf8",
-            "collate": "utf8-general-ci"
+            "collate": "utf8_general_ci"
         }
     }
 }
