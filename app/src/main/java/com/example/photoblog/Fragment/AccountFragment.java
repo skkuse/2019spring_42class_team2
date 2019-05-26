@@ -134,7 +134,7 @@ public class AccountFragment extends Fragment {
                                                 if (task.isSuccessful()) {
 
                                                     User user = task.getResult().toObject(User.class);
-
+                                                    
 
 
                                                     Log.i("user", "onComplete: "+user);
