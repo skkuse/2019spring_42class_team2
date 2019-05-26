@@ -43,6 +43,10 @@ public class AddPostActivity extends AppCompatActivity {
 
     private ImageView imageViewId;
     private EditText postDescriptionET;
+    private EditText postTitleET;
+    private EditText postPriceET;
+
+
     private Button addPostBtn;
     private ProgressBar setUpProgressBar;
     private Uri postImageUri = null;
@@ -60,11 +64,8 @@ public class AddPostActivity extends AppCompatActivity {
 
         imageViewId = findViewById(R.id.imageViewId);
         postDescriptionET = findViewById(R.id.postDescriptionET);
-
-
-        
-
-
+        postTitleET = findViewById(R.id.postTitleET);
+        postPriceET = findViewById(R.id.postPriceET);
 
 
         addPostBtn = findViewById(R.id.addPostBtn);
@@ -92,8 +93,10 @@ public class AddPostActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final String description = postDescriptionET.getText().toString();
+                final String title = postTitleET.getText().toString();
+                final String price = postPriceET.getText().toString();
 
-                if (!TextUtils.isEmpty(description) && postImageUri != null) {
+                if (!TextUtils.isEmpty(description) && !TextUtils.isEmpty(title) && !TextUtils.isEmpty(price) && postImageUri != null) {
 
                     setUpProgressBar.setVisibility(View.VISIBLE);
 
@@ -116,7 +119,7 @@ public class AddPostActivity extends AppCompatActivity {
                     byte[] imageData = baos.toByteArray();
 
 
-                    UploadTask  post_image_path = storageReference.child("post_images").child(randomName + ".jpg").putBytes(imageData);
+                    final UploadTask  post_image_path = storageReference.child("post_images").child(randomName + ".jpg").putBytes(imageData);
                     post_image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -148,10 +151,13 @@ public class AddPostActivity extends AppCompatActivity {
 
                                        final String dwonloadThumbUri = taskSnapshot.getDownloadUrl().toString();
 
+
                                         Map<String, Object> postMap = new HashMap<>();
                                         postMap.put("image_url", dwonloadUri);
                                         postMap.put("thumb_url", dwonloadThumbUri);
                                         postMap.put("description", description);
+                                        postMap.put("title",title);
+                                        postMap.put("price", "w".concat(price));
                                         postMap.put("current_UserId", currentUser);
                                         postMap.put("post_time", FieldValue.serverTimestamp());
 
@@ -165,6 +171,8 @@ public class AddPostActivity extends AppCompatActivity {
                                                     Toast.makeText(AddPostActivity.this, "Post was added", Toast.LENGTH_SHORT).show();
                                                     imageViewId.setImageResource(R.drawable.memories);
                                                     postDescriptionET.setText("");
+                                                    postTitleET.setText("");
+                                                    postPriceET.setText("");
                                                /*     Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
                                                     startActivity(intent);
                                                     finish();*/

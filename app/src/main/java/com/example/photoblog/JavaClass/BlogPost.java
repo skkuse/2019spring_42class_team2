@@ -4,25 +4,29 @@ import java.util.Date;
 
 public class BlogPost extends BlogPostId{
 
-   private String current_UserId,image_url,thumb_url,description;
+   private String current_UserId,image_url,thumb_url,description, title, price;
    private Date post_time;
 
     public BlogPost() {
     }
 
-    public BlogPost(String current_UserId, String image_url, String thumb_url, String description, Date post_time) {
+    public BlogPost(String current_UserId, String image_url, String thumb_url, String description, String title, String price, Date post_time) {
         this.current_UserId = current_UserId;
         this.image_url = image_url;
         this.thumb_url = thumb_url;
         this.description = description;
         this.post_time = post_time;
+        this.price = price;
+        this.title = title;
     }
 
-    public BlogPost(String current_UserId, String image_url, String thumb_url, String description) {
+    public BlogPost(String current_UserId, String image_url, String thumb_url,String title, String price, String description) {
         this.current_UserId = current_UserId;
         this.image_url = image_url;
         this.thumb_url = thumb_url;
         this.description = description;
+        this.title = title;
+        this.price = price;
     }
 
 
@@ -65,5 +69,21 @@ public class BlogPost extends BlogPostId{
 
     public void setPost_time(Date post_time) {
         this.post_time = post_time;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

@@ -83,6 +83,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         //Set Blog Content
         holder.userPostedDescriptionTV.setText(String.valueOf(currentBlogPost.getDescription()));
+        holder.userPostedTitleTV.setText(String.valueOf(currentBlogPost.getTitle()));
+        holder.userPostedPriceTV.setText(String.valueOf(currentBlogPost.getPrice()));
 
         placeholderRequest = new RequestOptions();
         placeholderRequest.placeholder(R.drawable.offwhite_image);
@@ -259,7 +261,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView userNameTV, blogPostDateTV, userPostedDescriptionTV, likesCountTV, commentsCountTV;
+        private TextView userNameTV, blogPostDateTV, userPostedDescriptionTV, likesCountTV, commentsCountTV, userPostedTitleTV, userPostedPriceTV;
         private ImageView userPostedImages, postLikeBtn, postCommentsBtn,postDeleteBtn;
         private CircleImageView userProfileImage;
 
@@ -269,6 +271,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             userNameTV = itemView.findViewById(R.id.userNameTV);
             blogPostDateTV = itemView.findViewById(R.id.blogPostDateTV);
             userPostedDescriptionTV = itemView.findViewById(R.id.userPostedDescriptionTV);
+            userPostedTitleTV = itemView.findViewById(R.id.userPostedTitleTV);
+            userPostedPriceTV = itemView.findViewById(R.id.userPostedPriceTV);
             userPostedImages = itemView.findViewById(R.id.userPostedImages);
             userProfileImage = itemView.findViewById(R.id.userProfileImage);
             likesCountTV = itemView.findViewById(R.id.likesCountTV);
