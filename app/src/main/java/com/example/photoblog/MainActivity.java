@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.photoblog.Fragment.AccountFragment;
@@ -21,7 +20,6 @@ import com.example.photoblog.Fragment.NotificationFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -63,7 +61,7 @@ public class  MainActivity extends AppCompatActivity {
                     case R.id.homeNavId:
                         replaceFragment(new HomeFragment());
                         return true;
-                    case R.id.notificationNavId:
+                    case R.id.categoryNavId:
                         replaceFragment(new NotificationFragment());
                         return true;
                     case R.id.accountNavId:
