@@ -34,7 +34,10 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Currency;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -151,13 +154,18 @@ public class AddPostActivity extends AppCompatActivity {
 
                                        final String dwonloadThumbUri = taskSnapshot.getDownloadUrl().toString();
 
+                                        String won = Currency.getInstance(Locale.KOREA).getSymbol();
+
+                                        DecimalFormat df = new DecimalFormat("#,###");
+                                        String priceform = df.format(Integer.parseInt(price));
+
 
                                         Map<String, Object> postMap = new HashMap<>();
                                         postMap.put("image_url", dwonloadUri);
                                         postMap.put("thumb_url", dwonloadThumbUri);
                                         postMap.put("description", description);
                                         postMap.put("title",title);
-                                        postMap.put("price", "w".concat(price));
+                                        postMap.put("price", won.concat(priceform));
                                         postMap.put("current_UserId", currentUser);
                                         postMap.put("post_time", FieldValue.serverTimestamp());
 

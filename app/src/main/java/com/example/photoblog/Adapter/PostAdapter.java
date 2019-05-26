@@ -100,7 +100,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
 
-        Log.i("???","?????");
 
         //User Data will be retrieved here...
         final String name = currentUser.getName();
@@ -108,8 +107,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         //Log.d("name", "onBindViewHolder: "+name);
 
-        Log.i("Post Adapter name","name");
-        Log.i("Post Adapter image","image");
+        Log.i("Post Adapter name",name);
+        Log.i("Post Adapter image",image);
 
 
 
