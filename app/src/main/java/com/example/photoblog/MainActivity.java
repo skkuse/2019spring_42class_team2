@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +45,7 @@ public class  MainActivity extends AppCompatActivity {
 
        if(firebaseAuth.getCurrentUser() != null) {
 
+           //아래 탭바
            bottomNavigationViewId = findViewById(R.id.bottomNavigationViewId);
 
            bottomNavigationViewId.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -77,9 +79,13 @@ public class  MainActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.i("Main","main");
+        //로그인 안돼있으면 로그인 창으로 이동
         if(currentUser == null){
           sendToLogin();
         }else {
+
+            //로그인 돼있는데 setup 안돼있으면 setupactivity로 이동
             currentUserId = firebaseAuth.getCurrentUser().getUid();
 
             firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -102,6 +108,7 @@ public class  MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //오른쪽 위 메뉴
         getMenuInflater().inflate(R.menu.menu_item_list,menu);
         return true;
     }

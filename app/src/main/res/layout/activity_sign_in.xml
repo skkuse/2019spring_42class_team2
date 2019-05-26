@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/BackgroundColor"
+    android:background="#FFFFFF"
     tools:context=".SignInActivity">
 
     <LinearLayout
@@ -28,113 +28,105 @@
 
         <ProgressBar
             android:id="@+id/singInProgressBar"
-            android:visibility="invisible"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:indeterminate="true"
-            android:layout_marginTop="24dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="Welcome to"
-            android:textSize="18sp"
-            android:textColor="@color/White"
-            android:layout_marginTop="24dp"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="Photo Blog"
-            android:textSize="36sp"
-            android:textColor="@color/White"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:text="E-mail"
-            android:textSize="18sp"
-            android:textColor="@color/White"
-            android:layout_marginTop="36dp"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/userEmailET"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:imeOptions="actionNext"
-            android:background="@drawable/rounded_edit_text"
-            android:padding="10dp"
-            android:hint="User email"
-            android:drawableLeft="@drawable/ic_email_black_24dp"
-            android:textColor="@color/Black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:text="Password"
-            android:textSize="18sp"
-            android:textColor="@color/White"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/userPasswordET"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/rounded_edit_text"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:drawableLeft="@drawable/ic_lock_black_24dp"
-            android:padding="10dp"
-            android:hint="User password"
-            android:textColor="@color/Black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/signInBtn"
-            android:layout_marginTop="24dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_gravity="center"
-            android:text="@string/sign_in"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textColor="@color/Black"
-            android:background="@drawable/rounded_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_marginTop="24dp"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:indeterminate="true"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            app:srcCompat="@drawable/shark_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="36dp"
+            android:text="E-mail"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/userEmailET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edit_text"
+            android:drawableLeft="@drawable/ic_email_black_24dp"
+            android:hint="User email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/Black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Password"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/userPasswordET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edit_text"
+            android:drawableLeft="@drawable/ic_lock_black_24dp"
+            android:hint="User password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/Black" />
+
+        <Button
+            android:id="@+id/signInBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/sign_in"
+            android:textAllCaps="false"
+            android:textColor="@color/Black"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textColor="@color/White"
-                android:text="Have no account?"/>
+                android:text="Have no account?"
+                android:textColor="#000000" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
                 android:onClick="signUpOnclick"
-                android:textStyle="bold"
+                android:text="Sign Up"
+                android:textColor="#000000"
                 android:textSize="20sp"
-                android:textColor="@color/White"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

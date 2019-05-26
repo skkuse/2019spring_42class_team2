@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +60,9 @@ public class SetupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Log.i("setup","!!!!!!!!!!!!!!!");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
@@ -81,6 +85,10 @@ public class SetupActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
 
+
+                    Log.i("111111111111111111","111111");
+
+
                     if (task.getResult().exists()) {
                         String name = task.getResult().getString("Name");
                         String image = task.getResult().getString("Image");
@@ -94,6 +102,8 @@ public class SetupActivity extends AppCompatActivity {
 
                     }
 
+                    Log.i("2222222222222","2222222222");
+
                 } else {
                     String errorMessage = task.getException().getMessage();
                     Toast.makeText(SetupActivity.this, "Firestore Retrive Error: " + errorMessage, Toast.LENGTH_SHORT).show();
@@ -103,6 +113,7 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
+        Log.i("33333333","33333333333333");
         createAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +174,16 @@ public class SetupActivity extends AppCompatActivity {
         } else {
             dwonload_Uri = mainImageURI;
         }
+
+
+        /**
+         * username: 유저의 닉네임
+         * mainImageURI: 유저의 프로필 사진
+         */
+
+        Log.i("name",user_name);
+        Log.i("image",mainImageURI.toString());
+
 
         Map<String, String> userMap = new HashMap<>();
         userMap.put("Name", user_name);

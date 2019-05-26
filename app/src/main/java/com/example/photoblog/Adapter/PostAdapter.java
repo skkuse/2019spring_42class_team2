@@ -97,11 +97,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+
+        Log.i("???","?????");
+
         //User Data will be retrieved here...
         final String name = currentUser.getName();
         final String image = currentUser.getImage();
 
         //Log.d("name", "onBindViewHolder: "+name);
+
+        Log.i("Post Adapter name","name");
+        Log.i("Post Adapter image","image");
+
+
 
         holder.userNameTV.setText(name);
 

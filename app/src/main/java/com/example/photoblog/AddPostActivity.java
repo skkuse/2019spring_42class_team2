@@ -60,6 +60,13 @@ public class AddPostActivity extends AppCompatActivity {
 
         imageViewId = findViewById(R.id.imageViewId);
         postDescriptionET = findViewById(R.id.postDescriptionET);
+
+
+        
+
+
+
+
         addPostBtn = findViewById(R.id.addPostBtn);
         setUpProgressBar = findViewById(R.id.setUpProgressBar);
 

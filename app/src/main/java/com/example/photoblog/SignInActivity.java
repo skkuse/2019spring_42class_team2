@@ -41,6 +41,9 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //email: 유저가 입력한 ID
+                //password: 유저가 입력한 PW
+
                 String email = userEmailET.getText().toString();
                 String password = userPasswordET.getText().toString();
                 if (email.equals("") || password.equals("")) {
@@ -68,6 +71,8 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+
+    //로그인상태면 mainactivity로 보냄
     @Override
     protected void onStart() {
         super.onStart();

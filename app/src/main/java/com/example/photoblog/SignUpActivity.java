@@ -4,6 +4,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -36,6 +37,12 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUpBtn);
         signUpProgressBar = findViewById(R.id.signUpProgressBar);
 
+        /**
+         * email: 로그인 이메일
+         * password: 로그인 비밀번호
+         */
+
+
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +50,11 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = userPasswordET.getText().toString();
                 String confirmPassword = userConfirmPasswordET.getText().toString();
                 String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+                Log.i("email", email);
+                Log.i("pw", password);
+
+
 
                 if (email.equals("")) {
                     Toast.makeText(SignUpActivity.this, "Please enter email", Toast.LENGTH_SHORT).show();
