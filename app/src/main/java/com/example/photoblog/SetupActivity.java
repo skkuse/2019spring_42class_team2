@@ -99,11 +99,7 @@ public class SetupActivity extends AppCompatActivity {
                         RequestOptions placeholderRequest = new RequestOptions();
                         placeholderRequest.placeholder(R.drawable.image_icon);
                         Glide.with(SetupActivity.this).setDefaultRequestOptions(placeholderRequest).load(image).into(imageViewId);
-
                     }
-
-                    Log.i("2222222222222","2222222222");
-
                 } else {
                     String errorMessage = task.getException().getMessage();
                     Toast.makeText(SetupActivity.this, "Firestore Retrive Error: " + errorMessage, Toast.LENGTH_SHORT).show();

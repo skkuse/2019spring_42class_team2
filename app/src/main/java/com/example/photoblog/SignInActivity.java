@@ -4,6 +4,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,6 +54,8 @@ public class SignInActivity extends AppCompatActivity {
                     auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            Toast.makeText(getApplicationContext(), "" + task.isSuccessful(), Toast.LENGTH_LONG);
+                            Log.i("result", "" + task.isSuccessful());
                             if (task.isSuccessful()) {
                                 sendToMain();
                                 userEmailET.setText("");

@@ -54,8 +54,6 @@ public class SignUpActivity extends AppCompatActivity {
                 Log.i("email", email);
                 Log.i("pw", password);
 
-
-
                 if (email.equals("")) {
                     Toast.makeText(SignUpActivity.this, "Please enter email", Toast.LENGTH_SHORT).show();
                 } else if (!email.matches(emailPattern)) {
@@ -70,9 +68,11 @@ public class SignUpActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 startActivity(new Intent(SignUpActivity.this,SetupActivity.class));
                                 finish();
+                                Log.i("HERE", "success");
                             }else {
                                 String errorMessage = task.getException().getMessage();
                                 Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                Log.i("HERE", errorMessage);
                             }
 
                             signUpProgressBar.setVisibility(View.INVISIBLE);

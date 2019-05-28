@@ -4,12 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +38,9 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +49,9 @@ import java.util.Currency;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
+
+import static android.util.Base64.encodeToString;
 
 public class AddPostActivity extends AppCompatActivity {
 
@@ -54,7 +65,6 @@ public class AddPostActivity extends AppCompatActivity {
     private ProgressBar setUpProgressBar;
     private Uri postImageUri = null;
     private String currentUser;
-    private Bitmap compressedImageBitmap;
 
     private StorageReference storageReference;
     private FirebaseFirestore firebaseFirestore;
@@ -105,22 +115,8 @@ public class AddPostActivity extends AppCompatActivity {
 
                     final String randomName = UUID.randomUUID().toString();
 
-                    // PHOTO UPLOAD
-                    File actualImageFile = new File(postImageUri.getPath());
-                    try {
-                        compressedImageBitmap = new Compressor(AddPostActivity.this)
-                                .setMaxWidth(720)
-                                .setMaxHeight(720)
-                                .setQuality(50)
-                                .compressToBitmap(actualImageFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    compressedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageData = baos.toByteArray();
-
+                    // Uri to byte array transfer
+                    byte[] imageData = getImageDataFromUri(postImageUri, 720, 720, 50);
 
                     final UploadTask  post_image_path = storageReference.child("post_images").child(randomName + ".jpg").putBytes(imageData);
                     post_image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -131,21 +127,8 @@ public class AddPostActivity extends AppCompatActivity {
 
                             if (task.isSuccessful()) {
 
-                                // PHOTO UPLOAD
-                                File actualImageFile = new File(postImageUri.getPath());
-                                try {
-                                    compressedImageBitmap = new Compressor(AddPostActivity.this)
-                                            .setMaxWidth(240)
-                                            .setMaxHeight(240)
-                                            .setQuality(6)
-                                            .compressToBitmap(actualImageFile);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                compressedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                byte[] thumbData = baos.toByteArray();
+                                // Uri to byte array transfer
+                                byte[] thumbData = getImageDataFromUri(postImageUri, 240, 240, 6);
 
                                 UploadTask uploadTask = storageReference.child("post_images/thumbs").child(randomName + ".jpg").putBytes(thumbData);
                                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -158,7 +141,6 @@ public class AddPostActivity extends AppCompatActivity {
 
                                         DecimalFormat df = new DecimalFormat("#,###");
                                         String priceform = df.format(Integer.parseInt(price));
-
 
                                         Map<String, Object> postMap = new HashMap<>();
                                         postMap.put("image_url", dwonloadUri);
@@ -227,9 +209,106 @@ public class AddPostActivity extends AppCompatActivity {
                 postImageUri = result.getUri();
                 imageViewId.setImageURI(postImageUri);
 
+                // send a request
+                new Thread() {
+                    public void run() {
+                        String url = "https://vision.googleapis.com/v1/images:annotate?key=" + getString(R.string.vision_key);
+                        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+                        OkHttpClient client = new OkHttpClient();
+                        try {
+                            byte[] imageData = getImageDataFromUri(postImageUri, 240, 240, 6);
+
+                            JSONObject requestData = encodeJSONRequest(imageData);
+
+                            RequestBody body = RequestBody.create(JSON, requestData.toString());
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .post(body)
+                                    .build();
+                            Response response = client.newCall(request).execute();
+
+                            String resultStr = response.body().string();
+                            Log.i("Result", resultStr);
+                            String label = decodeJSONResponse(resultStr);
+                            Log.i("Result", label);
+                            postDescriptionET.setText(label);
+                        } catch (Exception e) {
+                            Log.e("REST API", e.toString());
+                        }
+                    }
+                }.start();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
+        }
+    }
+
+    private byte[] getImageDataFromUri(Uri imageUri, int maxWidth, int maxHeight, int quality) {
+        File actualImageFile = new File(postImageUri.getPath());
+        Bitmap compressedImageBitmap = null;
+        try {
+            compressedImageBitmap = new Compressor(AddPostActivity.this)
+                    .setMaxWidth(maxWidth)
+                    .setMaxHeight(maxHeight)
+                    .setQuality(quality)
+                    .compressToBitmap(actualImageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            compressedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            return baos.toByteArray();
+        }
+    }
+
+    private JSONObject encodeJSONRequest(byte[] imageData) {
+        String imageBase64 = Base64.encodeToString(imageData, 0);
+        JSONObject finalRequest = null;
+        try {
+            JSONObject imageObj = new JSONObject();
+            imageObj.put("content", imageBase64);
+            JSONObject featureObj = new JSONObject();
+            featureObj.put("type", "LABEL_DETECTION");
+            featureObj.put("maxResults", 1);
+            JSONArray featureArr = new JSONArray();
+            featureArr.put(featureObj);
+
+            JSONObject requestObj = new JSONObject();
+            requestObj.put("image", imageObj);
+            requestObj.put("features", featureArr);
+
+            JSONArray requestArr = new JSONArray();
+            requestArr.put(requestObj);
+
+            finalRequest = new JSONObject();
+            finalRequest.put("requests", requestArr);
+        } catch(Exception e) {
+            Log.e("JSON Parsing", e.toString());
+        } finally {
+            return finalRequest;
+        }
+    }
+
+    private String decodeJSONResponse(String responseData) {
+        String result = null;
+        try {
+            JSONObject response = new JSONObject(responseData);
+
+            JSONArray responseArr = response.getJSONArray("responses");
+            Log.i("step1", responseArr.toString());
+            JSONObject responseSingle = responseArr.getJSONObject(0);
+            Log.i("step2", responseSingle.toString());
+            JSONArray annotationArr = responseSingle.getJSONArray("labelAnnotations");
+            Log.i("step3", annotationArr.toString());
+            JSONObject annotation = annotationArr.getJSONObject(0);
+            Log.i("step4", annotation.toString());
+            result = annotation.getString("description");
+            Log.i("JSON Decode", result);
+        } catch(Exception e) {
+            Log.e("JSON Parsing", e.toString());
+        } finally {
+            return result;
         }
     }
 }
