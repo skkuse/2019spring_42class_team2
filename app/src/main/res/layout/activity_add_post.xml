@@ -87,19 +87,61 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="80dp"
+            android:layout_height="29dp"
+            android:gravity="center"
+            android:text="SIZE: "
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/postDepthET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Depth"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/postHeightET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Height"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/postWidthET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Width"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/addPostBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="24dp"
         android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_gravity="center"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@color/colorAccent"
         android:text="Upload Post"
         android:textAllCaps="false"
-        android:textSize="20sp"
         android:textColor="@color/White"
-        android:backgroundTint="@color/colorAccent"
-        android:background="@drawable/rounded_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textSize="20sp" />
 
 </LinearLayout>

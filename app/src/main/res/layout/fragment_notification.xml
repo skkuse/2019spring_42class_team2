@@ -1,10 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment.NotificationFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:orientation="horizontal"
+        android:paddingRight="15dp">
 
+        <EditText
+            android:id="@+id/SearchET"
+            android:layout_width="324dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_edit_text"
+            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:hint="Search"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/Black" />
 
-</FrameLayout>
+        <Button
+            android:id="@+id/Searchbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:drawable/ic_search_category_default"
+            android:padding="10dp"
+            android:paddingRight="20dp" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

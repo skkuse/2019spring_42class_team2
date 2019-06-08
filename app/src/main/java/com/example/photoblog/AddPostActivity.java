@@ -45,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Locale;
@@ -60,6 +61,12 @@ public class AddPostActivity extends AppCompatActivity {
     private EditText postTitleET;
     private EditText postPriceET;
 
+    //길이 받기
+    private EditText postWidthET;
+    private EditText postHeightET;
+    private EditText postDepthET;
+
+
 
     private Button addPostBtn;
     private ProgressBar setUpProgressBar;
@@ -70,6 +77,9 @@ public class AddPostActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
+    private Map<String, String> TAG = new HashMap<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +89,9 @@ public class AddPostActivity extends AppCompatActivity {
         postDescriptionET = findViewById(R.id.postDescriptionET);
         postTitleET = findViewById(R.id.postTitleET);
         postPriceET = findViewById(R.id.postPriceET);
-
+        postWidthET = findViewById(R.id.postWidthET);
+        postHeightET = findViewById(R.id.postHeightET);
+        postDepthET = findViewById(R.id.postDepthET);
 
         addPostBtn = findViewById(R.id.addPostBtn);
         setUpProgressBar = findViewById(R.id.setUpProgressBar);
@@ -108,6 +120,36 @@ public class AddPostActivity extends AppCompatActivity {
                 final String description = postDescriptionET.getText().toString();
                 final String title = postTitleET.getText().toString();
                 final String price = postPriceET.getText().toString();
+
+
+                final String width = postWidthET.getText().toString();
+                final String height = postHeightET.getText().toString();
+                final String depth = postDepthET.getText().toString();
+
+                final Double doubleWidth;
+                final Double doubleHeight;
+                final Double doubleDepth;
+
+
+                //빈칸이거나 숫자화 불가능하면 모두 0으로 처리
+                if(!(isStringDouble(width) && isStringDouble(height) && isStringDouble(depth)))
+                {
+                    doubleWidth = (double)0;
+                    doubleDepth = (double)0;
+                    doubleHeight = (double)0;
+
+                    /**
+                     * Size가 모두 0일 경우에는 AR을 실행시킬 수 없도록 하면 될것같습니다.
+                     * */
+
+                }
+                else
+                {
+                    doubleWidth = Double.valueOf(width);
+                    doubleDepth = Double.valueOf(depth);
+                    doubleHeight = Double.valueOf(height);
+                }
+
 
                 if (!TextUtils.isEmpty(description) && !TextUtils.isEmpty(title) && !TextUtils.isEmpty(price) && postImageUri != null) {
 
@@ -139,8 +181,24 @@ public class AddPostActivity extends AppCompatActivity {
 
                                         String won = Currency.getInstance(Locale.KOREA).getSymbol();
 
-                                        DecimalFormat df = new DecimalFormat("#,###");
-                                        String priceform = df.format(Integer.parseInt(price));
+                                        String priceform;
+                                        if(!isStringDouble(price))
+                                            priceform = "0";
+                                        else {
+                                            DecimalFormat df = new DecimalFormat("#,###");
+                                            priceform = df.format(Integer.parseInt(price));
+
+                                        }
+                                        String swidth = doubleWidth.toString();
+                                        String sdepth = doubleDepth.toString();
+                                        String sheight = doubleHeight.toString();
+
+                                        Map<String, String> size = new HashMap<>();
+
+                                        size.put("width",swidth);
+                                        size.put("height",sheight);
+                                        size.put("depth",sdepth);
+
 
                                         Map<String, Object> postMap = new HashMap<>();
                                         postMap.put("image_url", dwonloadUri);
@@ -150,6 +208,10 @@ public class AddPostActivity extends AppCompatActivity {
                                         postMap.put("price", won.concat(priceform));
                                         postMap.put("current_UserId", currentUser);
                                         postMap.put("post_time", FieldValue.serverTimestamp());
+                                        postMap.put("size",size);
+                                        postMap.put("TAG",TAG);
+
+
 
                                         //FirebaseFirestore
                                         firebaseFirestore.collection("Posts").add(postMap).
@@ -163,6 +225,10 @@ public class AddPostActivity extends AppCompatActivity {
                                                     postDescriptionET.setText("");
                                                     postTitleET.setText("");
                                                     postPriceET.setText("");
+                                                    postWidthET.setText("");
+                                                    postDepthET.setText("");
+                                                    postHeightET.setText("");
+
                                                /*     Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
                                                     startActivity(intent);
                                                     finish();*/
@@ -270,7 +336,9 @@ public class AddPostActivity extends AppCompatActivity {
             imageObj.put("content", imageBase64);
             JSONObject featureObj = new JSONObject();
             featureObj.put("type", "LABEL_DETECTION");
-            featureObj.put("maxResults", 1);
+
+            //몇개를 받을것인가?
+            featureObj.put("maxResults", 3);
             JSONArray featureArr = new JSONArray();
             featureArr.put(featureObj);
 
@@ -292,6 +360,7 @@ public class AddPostActivity extends AppCompatActivity {
 
     private String decodeJSONResponse(String responseData) {
         String result = null;
+        TAG.clear();
         try {
             JSONObject response = new JSONObject(responseData);
 
@@ -301,14 +370,46 @@ public class AddPostActivity extends AppCompatActivity {
             Log.i("step2", responseSingle.toString());
             JSONArray annotationArr = responseSingle.getJSONArray("labelAnnotations");
             Log.i("step3", annotationArr.toString());
-            JSONObject annotation = annotationArr.getJSONObject(0);
-            Log.i("step4", annotation.toString());
-            result = annotation.getString("description");
-            Log.i("JSON Decode", result);
+
+            for(int i=0; i<3; i++) {
+                JSONObject annotation = annotationArr.getJSONObject(i);
+                Log.i("step4", annotation.toString());
+
+                String index = Integer.toString(i);
+
+                TAG.put(index, annotation.getString("description"));
+
+
+            }
+            //result = annotation.getString("description");
+            //Log.i("JSON Decode", result);
+
+            result = TAG.toString();
+
+
+            Log.i("TAG", TAG.toString());
         } catch(Exception e) {
             Log.e("JSON Parsing", e.toString());
         } finally {
             return result;
         }
     }
+
+
+    //문자가 숫자화 가능한가?
+    public static boolean isStringDouble(String s)
+    {
+        try{
+
+            if(s.length() <=0)
+                return false;
+
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+
 }
