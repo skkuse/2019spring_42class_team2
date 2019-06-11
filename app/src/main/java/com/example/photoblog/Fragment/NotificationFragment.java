@@ -60,6 +60,7 @@ public class NotificationFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private int pageLimit = 500;
     private Button Searchbtn;
+    private String lastKeyword = null;
 
 
 
@@ -99,19 +100,19 @@ public class NotificationFragment extends Fragment {
     Button.OnClickListener mClickListener = new View.OnClickListener(){
         public void onClick(View v)
         {
-
-
             /**
              * keyword가 검색어 keyword와 TAG를 비교해서 띄워줘야함
              */
-            String keyword = "";
-            if(SearchET.getText().toString().length() <=0)
+
+            if(SearchET.getText().toString().length() <=0) {
                 Toast.makeText(getActivity(), "검색어를 입력해주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
             else {
-                keyword = SearchET.getText().toString();
+                lastKeyword  = SearchET.getText().toString();
             }
 
-            Log.i("Keyword", keyword);
+            Log.i("Keyword", lastKeyword);
 
             if (firebaseAuth.getCurrentUser() != null) {
 
@@ -126,18 +127,23 @@ public class NotificationFragment extends Fragment {
 
                         if (reachedBottom) {
                             Toast.makeText(getActivity(), "Next Page", Toast.LENGTH_SHORT).show();
-                            loadNextPost();
+                            //loadNextPost();
                         }
                     }
                 });
 
 
-                Query firstQuery = firebaseFirestore.collection("Posts").orderBy("post_time", Query.Direction.DESCENDING).limit(pageLimit);
+                Query firstQuery = firebaseFirestore.collection("Posts").orderBy("post_time", Query.Direction.DESCENDING).limit(pageLimit)
+                        .whereEqualTo("description", lastKeyword);
+
 
                 firstQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-
+                        if (documentSnapshots == null ) {
+                            Log.d("Snapshot", "Snapshot is null");
+                            return;
+                        }
                         if (!documentSnapshots.isEmpty()) {
 
                             if (isFirstPageFirstLoad) {
@@ -174,10 +180,10 @@ public class NotificationFragment extends Fragment {
                                      *
                                      * 이 아래 if continue 부분을 바꿔주면 됨
                                      */
-                                    if (!blogUserId.equals(currentUser.getUid()))
+                                    if (blogUserId.equals(currentUser.getUid()))
                                         continue;
 
-
+                                    Log.d("Adapter", "about to add");
                                     firebaseFirestore.collection("Users").document(blogUserId).get()
                                             .addOnCompleteListener(getActivity(), new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
@@ -235,7 +241,7 @@ public class NotificationFragment extends Fragment {
 
     public void loadNextPost() {
 
-        Log.i("loadnext","post");
+        Log.d("Load", lastKeyword);
         if (firebaseAuth.getCurrentUser() != null) {
 
             Query nextQuery = firebaseFirestore.collection("Posts")
