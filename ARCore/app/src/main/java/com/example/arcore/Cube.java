@@ -132,6 +132,7 @@ public class Cube {
 
     public void draw() {
         GLES20.glUseProgram(mProgram);
+        //add program to OpenGL environment
 
         int position = GLES20.glGetAttribLocation(mProgram, "aPosition");
         int color = GLES20.glGetAttribLocation(mProgram, "aColor");

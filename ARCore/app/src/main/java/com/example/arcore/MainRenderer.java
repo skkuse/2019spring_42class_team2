@@ -31,10 +31,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     }
 
     public MainRenderer(RenderCallback callback, float width, float depth, float height) {
-        /*float width = 0.3f;
-        float depth = 0.3f;
-        float height = 0.3f;*/
-
 
         mCamera = new CameraRenderer();
 

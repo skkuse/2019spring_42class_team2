@@ -51,38 +51,19 @@ public class MainActivity extends Activity {
     private float mCurrentY;
     private boolean mTouched = false;
 
-    EditText input1;
-    EditText input2;
-    EditText input3;
-
-    Button b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideStatusBarAndTitleBar();
+        //hide status bar and make it full screen
         setContentView(R.layout.activity_main);
 
-        input1=findViewById(R.id.input1);
-        input2=findViewById(R.id.input2);
-        input3=findViewById(R.id.input3);
-
-
-        final float[] width = {0.2f};
-        final float[] depth= {0.2f};
-        final float[] height= {0.2f};
-
-        /*b=(Button)findViewById(R.id.buildbutton);
-
-        b.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                width[0] =(float)(Integer.parseInt(input1.getText().toString())/100);
-                depth[0] =(float)(Integer.parseInt(input2.getText().toString())/100);
-                height[0] =(float)(Integer.parseInt(input3.getText().toString())/100);
-
-            }
-        });*/
+        float width = 0.20f;
+        float depth = 0.20f;
+        float height =0.20f;
+        //Cube size width, depth, height
+        //Unit: meter
 
         mTextView = (TextView) findViewById(R.id.ar_core_text);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
@@ -163,7 +144,7 @@ public class MainActivity extends Activity {
                 mRenderer.setProjectionMatrix(projMatrix);
                 mRenderer.updateViewMatrix(viewMatrix);
             }
-        }, width[0],depth[0],height[0]);
+        }, width, depth, height);
 
         mSurfaceView.setPreserveEGLContextOnPause(true);
         mSurfaceView.setEGLContextClientVersion(2);

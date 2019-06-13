@@ -18,57 +18,11 @@
         <TextView
             android:id="@+id/ar_core_text"
             android:textSize="30sp"
-            android:textColor="#ffff0000"
+            android:textColor="#03A9F4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/input1"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="1dp"
-        android:ems="10"
-        android:hint="가로"
-        android:inputType="numberSigned"
-        android:singleLine="false" />
-
-    <EditText
-        android:id="@+id/input2"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="0dp"
-        android:ems="10"
-        android:hint="세로"
-        android:inputType="numberSigned" />
-
-    <EditText
-        android:id="@+id/input3"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="0dp"
-        android:ems="10"
-        android:hint="높이"
-        android:inputType="numberSigned" />
-
-    <Button
-        android:id="@+id/buildbutton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/input3"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="0dp"
-        android:text="빌드" />
 
 </RelativeLayout>

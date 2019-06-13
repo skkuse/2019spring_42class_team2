@@ -9,7 +9,6 @@ import com.google.ar.core.Frame;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 
 public class CameraRenderer {
     private static final String TAG = CameraRenderer.class.getSimpleName();
