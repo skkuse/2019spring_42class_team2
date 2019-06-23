@@ -177,7 +177,7 @@ public class AddPostActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                       final String dwonloadThumbUri = taskSnapshot.getDownloadUrl().toString();
+                                        final String dwonloadThumbUri = taskSnapshot.getDownloadUrl().toString();
 
                                         String won = Currency.getInstance(Locale.KOREA).getSymbol();
 
@@ -216,31 +216,31 @@ public class AddPostActivity extends AppCompatActivity {
                                         //FirebaseFirestore
                                         firebaseFirestore.collection("Posts").add(postMap).
                                                 addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                if (task.isSuccessful()) {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                        if (task.isSuccessful()) {
 
-                                                    Toast.makeText(AddPostActivity.this, "Post was added", Toast.LENGTH_SHORT).show();
-                                                    imageViewId.setImageResource(R.drawable.memories);
-                                                    postDescriptionET.setText("");
-                                                    postTitleET.setText("");
-                                                    postPriceET.setText("");
-                                                    postWidthET.setText("");
-                                                    postDepthET.setText("");
-                                                    postHeightET.setText("");
+                                                            Toast.makeText(AddPostActivity.this, "Post was added", Toast.LENGTH_SHORT).show();
+                                                            imageViewId.setImageResource(R.drawable.memories);
+                                                            postDescriptionET.setText("");
+                                                            postTitleET.setText("");
+                                                            postPriceET.setText("");
+                                                            postWidthET.setText("");
+                                                            postDepthET.setText("");
+                                                            postHeightET.setText("");
 
                                                /*     Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
                                                     startActivity(intent);
                                                     finish();*/
 
-                                                } else {
-                                                    String errorMessage = task.getException().getMessage();
-                                                    Toast.makeText(AddPostActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
-                                                }
+                                                        } else {
+                                                            String errorMessage = task.getException().getMessage();
+                                                            Toast.makeText(AddPostActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                                        }
 
-                                                setUpProgressBar.setVisibility(View.INVISIBLE);
-                                            }
-                                        });
+                                                        setUpProgressBar.setVisibility(View.INVISIBLE);
+                                                    }
+                                                });
 
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -338,7 +338,7 @@ public class AddPostActivity extends AppCompatActivity {
             featureObj.put("type", "LABEL_DETECTION");
 
             //몇개를 받을것인가?
-            featureObj.put("maxResults", 3);
+            featureObj.put("maxResults", 1);
             JSONArray featureArr = new JSONArray();
             featureArr.put(featureObj);
 
@@ -365,36 +365,18 @@ public class AddPostActivity extends AppCompatActivity {
             JSONObject response = new JSONObject(responseData);
 
             JSONArray responseArr = response.getJSONArray("responses");
-            Log.i("step1", responseArr.toString());
             JSONObject responseSingle = responseArr.getJSONObject(0);
-            Log.i("step2", responseSingle.toString());
             JSONArray annotationArr = responseSingle.getJSONArray("labelAnnotations");
-            Log.i("step3", annotationArr.toString());
 
-            for(int i=0; i<3; i++) {
-                JSONObject annotation = annotationArr.getJSONObject(i);
-                Log.i("step4", annotation.toString());
-
-                String index = Integer.toString(i);
-
-                TAG.put(index, annotation.getString("description"));
-
-
-            }
-            //result = annotation.getString("description");
-            //Log.i("JSON Decode", result);
-
-            result = TAG.toString();
-
-
-            Log.i("TAG", TAG.toString());
+            // use first annotation only
+            JSONObject annotation = annotationArr.getJSONObject(0);
+            result = annotation.getString("description");
         } catch(Exception e) {
             Log.e("JSON Parsing", e.toString());
         } finally {
             return result;
         }
     }
-
 
     //문자가 숫자화 가능한가?
     public static boolean isStringDouble(String s)

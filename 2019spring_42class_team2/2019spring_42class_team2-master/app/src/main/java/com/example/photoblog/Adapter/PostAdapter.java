@@ -1,9 +1,11 @@
 package com.example.photoblog.Adapter;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,12 +74,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         holder.setIsRecyclable(false);
 
-        BlogPost currentBlogPost = blogPostList.get(position);
+        final BlogPost currentBlogPost = blogPostList.get(position);
         User currentUser = userList.get(position);
 
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
         final String blogPostId = blogPostList.get(position).BlogPostId;
         String blogUserId = currentBlogPost.getCurrent_UserId();
+        final float h = blogPostList.get(position).getHeight();
+        final float d = blogPostList.get(position).getDepth();
+        final float w = blogPostList.get(position).getWidth();
+
+
+
 
         //Log.d("blogUserId", "onBindViewHolder: "+blogUserId);
 
@@ -85,6 +93,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.userPostedDescriptionTV.setText(String.valueOf(currentBlogPost.getDescription()));
         holder.userPostedTitleTV.setText(String.valueOf(currentBlogPost.getTitle()));
         holder.userPostedPriceTV.setText(String.valueOf(currentBlogPost.getPrice()));
+
+
 
         placeholderRequest = new RequestOptions();
         placeholderRequest.placeholder(R.drawable.offwhite_image);
@@ -236,13 +246,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ARCoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("height", 0.4f);
-                intent.putExtra("width", 0.4f);
-                intent.putExtra("depth", 0.4f);
 
-                intent.setClass(context, com.example.arcore.MainActivity.class);
-                intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+                ComponentName compName = new ComponentName("com.example.arcore","com.example.arcore.MainActivity");
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.setComponent(compName);
+
+                if(h==0 || d==0 || w==0){
+                    intent.putExtra("height", 0.1f);
+                    intent.putExtra("width", 0.1f);
+                    intent.putExtra("depth", 0.1f);
+                }else{
+                    intent.putExtra("height", h);
+                    intent.putExtra("width", w);
+                    intent.putExtra("depth", d);
+                }
+
+                /*intent.putExtra("height", 0.3f);
+                intent.putExtra("width", 0.3f);
+                intent.putExtra("depth", 0.3f);*/
+
                 context.startActivity(intent);
             }
         });
@@ -278,6 +301,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView userNameTV, blogPostDateTV, userPostedDescriptionTV, likesCountTV, commentsCountTV, userPostedTitleTV, userPostedPriceTV, ARCoreBtn;
         private ImageView userPostedImages, postLikeBtn, postCommentsBtn,postDeleteBtn;
         private CircleImageView userProfileImage;
+        private float h,d,w;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

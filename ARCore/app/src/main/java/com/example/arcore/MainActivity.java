@@ -2,6 +2,7 @@ package com.example.arcore;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
@@ -58,9 +59,12 @@ public class MainActivity extends Activity {
         //hide status bar and make it full screen
         setContentView(R.layout.activity_main);
 
-        float width = 0.20f;
-        float depth = 0.20f;
-        float height =0.20f;
+
+        Intent intent = getIntent();
+
+        float width = intent.getFloatExtra("width",0.2f);
+        float depth = intent.getFloatExtra("width",0.2f);
+        float height =intent.getFloatExtra("width",0.2f);
         //Cube size width, depth, height
         //Unit: meter
 
