@@ -2,12 +2,16 @@ package com.example.arcore;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
+
+
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -15,18 +19,18 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.arcore.R;
-import com.google.ar.core.Anchor;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.photoblog.R;
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
-import com.google.ar.core.Point;
 import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
@@ -50,22 +54,39 @@ public class MainActivity extends Activity {
     private float mCurrentY;
     private boolean mTouched = false;
 
+    private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hideStatusBarAndTitleBar();
         //hide status bar and make it full screen
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_ar);
 
-        float width = 0.20f;
-        float depth = 0.20f;
-        float height =0.20f;
-        //Cube size width, depth, height
-        //Unit: meter
+        Button backbtn=(Button) findViewById(R.id.backBtn);
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, com.example.photoblog.MainActivity.class);
+                intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
+        //돌아가기
 
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
         //layoutsetting
+
+        Intent intent = getIntent();
+
+        float width = intent.getExtras().getFloat("width");
+        float depth = intent.getExtras().getFloat("depth");
+        float height = intent.getExtras().getFloat("height");
+        //Cube size width, depth, height
+        //default value = 0.2f
+        //Unit: meter
 
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         if (displayManager != null) {
@@ -193,6 +214,8 @@ public class MainActivity extends Activity {
 
         mSurfaceView.onResume();
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+
     }
 
     @Override
